@@ -17,26 +17,27 @@ NVME='nvme0n'
 FACTOR=1000
 ssd_pattern = '(nvme0n\d+)\s+\d+:\d.*disk'
 
+def copy_act_cfg_2_act_dir(actfile):
+    cmd = 'cp {} ../act/.'.format(actfile)
+    subprocess.call(cmd.split())
+
 def get_device_name(no_of_devices):
     cmd = "lsblk"
-    print "cmd:", cmd
     try:
-        templist = subprocess.check_output(cmd.split(";")).splitlines()
+        templist = subprocess.check_output(cmd.split()).splitlines()
     except Exception, i:
         print '\nException: ', i
         return  None
-    print templist
     nvmelist = []
     for _temp in templist:
-       print "new:", _temp
        matchssd = re.compile(ssd_pattern)
        if matchssd.match(_temp):
            nvmelist.append(_temp)
     if not nvmelist:
-       print "did not find ssd"
+       print "Failure in finding any ssd."
        return None
     if no_of_devices > len(nvmelist) or no_of_devices < 1:
-       print "No enough nvme devices."
+       print "No enough nvme devices found to meet the configuration need."
        return None
     else:
       device_list = ''
@@ -45,18 +46,6 @@ def get_device_name(no_of_devices):
           if device != no_of_devices:
               device_list += ','
     return device_list
-
-
-def make_file_executable(actfile):
-    cmd = "sudo chmod 700  {}".format(actfile)
-    print "cmd:", cmd
-    try:
-        subprocess.check_output(cmd.split()).splitlines()
-        return True
-    except Exception, i:
-        print '\nException: ', i
-        return False
-
 
 
 def act_cfg_gen(no_of_devices, writeload, readload, num_queues, threads_per_queue, runtime, actfile):
@@ -78,8 +67,6 @@ def act_cfg_gen(no_of_devices, writeload, readload, num_queues, threads_per_queu
     device_names = get_device_name(no_of_devices)
     if not device_names:
         return None
-       
-    print "device_name = ", device_names
     try:
         act_file_fd = open(actfile, "wb")
         act_file_fd.write('##########\n')
@@ -105,7 +92,7 @@ def act_cfg_gen(no_of_devices, writeload, readload, num_queues, threads_per_queu
         act_file_fd.write('# noop|cfq - default is noop:\n')
         act_file_fd.write('scheduler-mode: %s\n' % str(scheduler_mode))
         act_file_fd.close()
-        print 'Config file ' + str(actfile) + ' successfully created.'
+        print 'Config file {} is successfully created.'.format(actfile)
         return True
     except Exception, i:
         print '\nException: ', i
@@ -114,8 +101,8 @@ def act_cfg_gen(no_of_devices, writeload, readload, num_queues, threads_per_queu
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-actcfgfile', '--cfgfile_for_act', dest='actfile', type=str, default='actcfg')
-parser.add_argument('-numberofssd', '--numberofssd', dest='no_ssd', type=int, default=4)
-parser.add_argument('-actwriteload', '--actwriteload', dest='actwriteload', type=int, default=12)
+parser.add_argument('-numberofssd', '--numberofssd', dest='no_ssd', type=int, default=1)
+parser.add_argument('-actwriteload', '--actwriteload', dest='actwriteload', type=int, default=6)
 parser.add_argument('-actreadload', '--actreadload', dest='actreadload', type=int, default=6)
 parser.add_argument('-runtime', '--runtime', dest='runtime', type=int, default=168)
 parser.add_argument('-no_queue', '--no_queue', dest='no_queue', type=int, default=8)
@@ -125,8 +112,8 @@ parser.add_argument('-no_thread_per_queue', '--no_thread_per_queue', dest='no_th
 args = parser.parse_args()
 
 actcfg_file = '{}_ssd_{}_write_{}_read_{}.txt'.format(args.actfile, args.no_ssd, args.actwriteload, args.actreadload)
-print actcfg_file
 
 if not act_cfg_gen(args.no_ssd,  args.actwriteload, args.actreadload,  args.no_queue, args.no_thread_per_queue, args.runtime, actcfg_file):
-    print "Fails to create ACT configuration file."
-
+    print "Fails to create ACT configuration file {}.".format(actcfg_file)
+else:
+    copy_act_cfg_2_act_dir(actcfg_file)
