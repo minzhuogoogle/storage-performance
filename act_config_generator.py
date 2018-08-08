@@ -18,7 +18,7 @@ FACTOR=1000
 ssd_pattern = '(nvme0n\d+)\s+\d+:\d.*disk'
 
 def copy_act_cfg_2_act_dir(actfile):
-    cmd = 'cp {} ../act/.'.format(actfile)
+    cmd = 'cp {} ../.'.format(actfile)
     subprocess.call(cmd.split())
 
 def get_device_name(no_of_devices):
