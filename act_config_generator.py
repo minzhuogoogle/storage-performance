@@ -17,9 +17,6 @@ NVME='nvme0n'
 FACTOR=1000
 ssd_pattern = '(nvme0n\d+)\s+\d+:\d.*disk'
 
-def copy_act_cfg_2_act_dir(actfile):
-    cmd = 'cp {} ../.'.format(actfile)
-    subprocess.call(cmd.split())
 
 def get_device_name(no_of_devices):
     cmd = "lsblk"
@@ -115,5 +112,3 @@ actcfg_file = '{}_ssd_{}_write_{}_read_{}.txt'.format(args.actfile, args.no_ssd,
 
 if not act_cfg_gen(args.no_ssd,  args.actwriteload, args.actreadload,  args.no_queue, args.no_thread_per_queue, args.runtime, actcfg_file):
     print "Fails to create ACT configuration file {}.".format(actcfg_file)
-else:
-    copy_act_cfg_2_act_dir(actcfg_file)

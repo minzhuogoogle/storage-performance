@@ -49,7 +49,8 @@ def is_initialize_running():
     try:
         templine = subprocess.check_output(cmd.split()).splitlines()
         for _temp in templine:
-            if './actprep' in _temp.split():
+            for __temp in  _temp.split():
+            if 'actprep' in __temp:
                 return True
         return False
     except Exception, i:
@@ -62,7 +63,6 @@ parser.add_argument('-device_type', '--device_type', dest='device_type', type=st
 parser.add_argument('-device_list', '--device_list', dest='device_list', type=str)
 parser.add_argument('-check_init_status', '--check_init_status', dest='check_init_status', type=bool, default=True)
 parser.add_argument('-start_ssd_init', '--start_ssd_init', dest='start_ssd_init', type=bool, default=False)
-
 
 
 args = parser.parse_args()
