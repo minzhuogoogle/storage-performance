@@ -26,7 +26,6 @@ fi
 
 
 
-cd /usr/local/google/home/mzhuo/partner/testlog
 for pattern in read write rw randread randwrite randrw
 do for iodepth in 128 256 512
    do for blocksize in  16k 32k 64k
