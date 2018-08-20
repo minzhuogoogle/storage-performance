@@ -29,8 +29,8 @@ fi
 for pattern in read write rw randread randwrite randrw
 do for iodepth in 128 256 512
    do for blocksize in  16k 32k 64k
-      do for filesize in 512M 1024M
-         do for numjobs in 24 48
+      do for filesize in 512k 
+         do for numjobs in 4 8
             do NOW=$(date +"%m.%d.%Y")
             HOSTNAME=$(hostname)
             rbwvalue=0
@@ -42,7 +42,7 @@ do for iodepth in 128 256 512
 
             fio --name=$pattern.data --iodepth=$iodepth --rw=$pattern --bs=$blocksize  \
                         --direct=1 --size=$filesize --numjobs=$numjobs  --fsync=1 \
-                        --group_reporting --time_based --runtime=3600 \
+                        --group_reporting --time_based --runtime=60 \
                         --output=fio.$pattern.$iodepth.$blocksize.$filesize.$numjobs.$NOW.$HOSTNAME.log
             echo "=================================="
             infoline=$(printf "pattern=%s iodepth=%s blocksize=%s filesize=%s numjobs=%s time=%s Hostname=%s" "$pattern $iodepth $blocksize $filsize $numjobs $NOW $HOSTNAME")
