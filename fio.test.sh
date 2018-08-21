@@ -17,10 +17,10 @@
 
 cd /mnt
 for pattern in read write rw randread randwrite randrw
-do for iodepth in 128 256 512
-   do for blocksize in  16k 32k 64k
-      do for filesize in 512M 1024M
-         do for numjobs in 4 8
+do for iodepth in 256
+   do for blocksize in  32k
+      do for filesize in 1024M
+         do for numjobs in 32
             do NOW=$(date +"%m.%d.%Y")
             HOSTNAME=$(hostname)
             fio --name=$pattern.data --iodepth=$iodepth --rw=$pattern --bs=$blocksize  \
