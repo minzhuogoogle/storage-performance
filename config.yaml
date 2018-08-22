@@ -8,18 +8,18 @@ periodics:
       tty: true
       stdin: true
       command:
-          - sh
-          - -c
-          - 'df -k'
+      - sh
+      - -c
+      - 'df -k'
       volumeMounts:
-        # name must match the volume name below
-        - name: mynfs
-          mountPath: "/mnt"
+      # name must match the volume name below
+      - name: mynfs
+        mountPath: "/mnt"
     volumes:
     - name: mynfs
       persistentVolumeClaim:
         claimName: elastifile-vol-1
-
+ 
 - interval: 1440m
   agent: kubernetes
   name: fileio-test
@@ -29,45 +29,43 @@ periodics:
       tty: true
       stdin: true
       command:
-          - sh
-          - -c
-          - 'cd storage-performance; ./fio.test.sh'
+      - sh
+      - -c
+      - 'cd storage-performance; ./fio.test.sh'
       volumeMounts:
-        # name must match the volume name below
-        - name: mynfs
-          mountPath: "/mnt"
+      # name must match the volume name below
+      - name: mynfs
+        mountPath: "/mnt"
     volumes:
     - name: mynfs
       persistentVolumeClaim:
         claimName: elastifile-vol-1
-
+ 
 postsubmits:
   minzhuogoogle/storage-performance:
   - name: test-postsubmit
     agent: kubernetes
     branches:
-      - master
+    - master
     max_concurrency: 1
-
     spec:
       containers:
       - image: gcr.io/cpe-performance-storage/fio-test:v20180820-f2a92fbd8
         tty: true
         stdin: true
         command:
-          - sh
-          - -c
-          - 'cd storage-performance; ./fio.test.sh'
+        - sh
+        - -c
+        - 'cd storage-performance; ./fio.test.sh'
         volumeMounts:
         # name must match the volume name below
-          - name: mynfs
-            mountPath: "/mnt"
+        - name: mynfs
+          mountPath: "/mnt"
       volumes:
       - name: mynfs
         persistentVolumeClaim:
           claimName: elastifile-vol-1
-
-
+ 
 presubmits:
   Google/test_infra:
   - name: test-presubmit
