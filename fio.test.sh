@@ -17,7 +17,7 @@
 
 cd /mnt
 for pattern in read write rw randread randwrite randrw
-do for iodepth in 128
+do for iodepth in 256
    do for blocksize in  32k
       do for filesize in 1024M
          do for numjobs in 16
