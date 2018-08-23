@@ -6,7 +6,7 @@
 #
 
 
-for pattern in read randrw
+for pattern in randrw
 do for iodepth in  128
    do for blocksize in  16k
       do for filesize in 512M
