@@ -9,7 +9,7 @@
 for pattern in randrw
 do for iodepth in  128
    do for blocksize in  16k
-      do for filesize in 512M
+      do for filesize in 1024M
          do for numjobs in  16
             do NOW=$(date +"%m.%d.%Y")
             HOSTNAME=$(hostname)
