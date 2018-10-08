@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "cpe-performance-storage",
+  "private_key_id": "dd837c6c8178c503ee987ccc242758218f0a444e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDBhUFf+3xhDXLC\nxlp4Miy3lT8UAe7Guz+SEWZtVN6Ao9jQbGW6NPytlqtrqJ92PVxrk5JsUXKQKjMR\nTnmzVhKP1T5EHei32pXoLkMv5UAHMlz0uKHm8BBZpUllQKKm8azcaI6P+/WjX9ui\nDaw8RyFp1Jg+mh5RHsD6+1bZW9Ao0rJMRGPdEjw7uM5Bi/8a8xe1/GefQ3RVffT/\nOBLm3oJqXboSsprcKWosYbxyV9+bDEPpqls3gqCdCO+hDH6FuJG7A6Hzkm7Utctg\nqJkBRijOXLFeVGbv2ZFv/XhBb8sqYKOGvfUAzIVKDocNozHS5zYhRCag4Tvi78mO\nXVkBBfDfAgMBAAECggEACOuomNER6bNh/+J+1x2Q/CFwF+8C37xP8N7GdvG7k/h5\njRoCEnRQ1XuliT/rodqwQPE7hay3eDfJxNl2OLMWBfVRenhaeucjk+FWDYYmzm4e\n5NUB+ZBFYKyC1p0FImbvjfVv5Ok7aH2JtU2mC91HiAZZwkD+dsTRJoChf0GBNfBz\n7CKfjKoarCQcDm90PGu1txkRA43bKF1cX1BxSTMIIupRrE4++CPYZ3gwrTErSSBV\nfye2tcW7YEqb1TjMq6/TRmEzBKERIqbPGuXKokJ/MF6So5UAhyDJFHFF0itpYixk\nImigZmAP+Smshz5jaOy/DEv6u3kW2rx8YXYNSaGoCQKBgQDg0OPC4JmHD0ER3wDg\n/PcSpJJIzZSNHLAZ1GaiWHXVzgOvcEBH67ItuENkfsCMXXQTl7zBwXj/5RjPXtzE\nKhVBNwKvnSHmy8zt9PDc/f15BqHKqE0dRyz7Q+nR6RIrAJfYPxyEpNyXnZQXafPe\nW7tI6kLLf7QYf7aRDoJAkjkIVQKBgQDcXRQ4TsiW0OHQVmHghYqgPlhmdOddVLl0\nvnN/KXTZMET540eXdh3fuJ95pU3mUxDkAy/K/i111ofM43pkpPsbyjaNrk7TI3Ah\nffITSnRf4a5GMzhXzKmEskZ4t62+MkcH4s9iYHlY74mheTyztCvYHGUCB4PiaBwP\nZ6sRrjDYYwKBgHNfoFNlckTWtj0WpdvQ1ndRz+Te5AqbG2DWGSndnfNwe4GwaLzA\nH7vI4YUUa3pdh3F6oJsK0C77AoWBmGhvdGL4eT9os3o/QtcnqeivzEIs/iEDyDdr\nTJFSZA+evf0lm8eVc+w6sx539wUhEc8eYnnkBw1qZyFfgXDl8kBzCiPVAoGAE1xi\nMGhLm2SS0nkkdFOHUHjpz2aqBTsyaB1rjFqaF5L0HHhpi9cm3Mcdy9RIOdpGe6IE\nCvO2DspgeBHsaPdN0K09icksx8QvT+H+6M771oi/hQ9u/dfPdQcsxeJtc257ayf0\nTJJpVvUExJkgSjGkQIKOJVV/st6uyHO1RgJl7D0CgYA5SgMC8umox1XN0SVrAIV0\nKdg/vVIJKtinE7VMlxmP9nllV8Z4mxcNAgmnlyJdcxUOi637FlweWMLboL/Y0zyV\n090iIF0DSIhQaY+hb6BqGh3x8o+1v9SbyKucksAmeFM7OuDK10Fj2wNzGI1WAmLz\ncV7JRQOZOykYHwmkwkcAcQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "storage@cpe-performance-storage.iam.gserviceaccount.com",
+  "client_id": "104807294047480273826",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/storage%40cpe-performance-storage.iam.gserviceaccount.com"
+}
