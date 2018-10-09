@@ -16,7 +16,7 @@ do for iodepth in 64 128 256 512
             fio --name=$pattern.data --iodepth=$iodepth --rw=$pattern --bs=$blocksize  \
                         --direct=1 --size=$filesize --numjobs=$numjobs  --fsync=1 --do_verify=1 --verify_fatal=1 \
                         --rwmixread=70 --rwmixwrite=30 --group_reporting --time_based --runtime=600 \
-                        --output=fio.$pattern.$iodepth.$blocksize.$filesize.$numjobs.$NOW.$HOSTNAME.log
+                        --output=/mnt/pd/fio.$pattern.$iodepth.$blocksize.$filesize.$numjobs.$NOW.$HOSTNAME.log
             rm -rf $pattern.data.*
             done
          done
