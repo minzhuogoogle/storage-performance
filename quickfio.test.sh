@@ -6,17 +6,18 @@
 #
 
 
-for pattern in randrw
-do for iodepth in  128
-   do for blocksize in  128k
+for pattern in read write randrw
+do for iodepth in  16
+   do for blocksize in  1M 4k
       do for filesize in 1024M
          do for numjobs in 16
             do NOW=$(date +"%m.%d.%Y")
             HOSTNAME=$(hostname)
             fio --name=$pattern.data --iodepth=$iodepth --rw=$pattern --bs=$blocksize  \
-                        --direct=1 --size=$filesize --numjobs=$numjobs  --fsync=1 --do_verify=1 --verify_fatal=1 \
+                        --direct=1 --size=$filesize --numjobs=$numjobs \
+                        --refill_buffers --norandommap --randrepeat=0 \
                         --rwmixread=70 --rwmixwrite=30 --group_reporting  \
-                        --output=qfio.$pattern.$iodepth.$blocksize.$filesize.$numjobs.$NOW.$HOSTNAME.log
+                        --output=/mnt/pd/qfio.$pattern.$iodepth.$blocksize.$filesize.$numjobs.$NOW.$HOSTNAME.log
             rm -rf $pattern.data.*
             done
          done
