@@ -3,7 +3,7 @@ size=1024m
 directory=/mnt/fio/
 iodepth=16
 direct=1
-numjobs=4
+numjobs=8
 randrepeat=0
 
 [readbw]
@@ -23,9 +23,13 @@ rw=write
 blocksize=4k
 
 [randrwbw]
-rw=write
+rw=randrw
 blocksize=1M
+rwmixread=70
+rwmixwrite=30
 
 [randrwiops]
-rw=write
+rw=randrw
 blocksize=4k
+rwmixread=70
+rwmixwrite=30
