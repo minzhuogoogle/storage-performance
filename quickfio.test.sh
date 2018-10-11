@@ -16,7 +16,7 @@ do for iodepth in  8
             fio --name=$pattern.data --iodepth=$iodepth --rw=$pattern --bs=$blocksize  \
                         --direct=1 --size=$filesize --numjobs=$numjobs \
                         --refill_buffers --norandommap --randrepeat=0 \
-                        --rwmixread=70 --rwmixwrite=30 --group_reporting --output-format=json \
+                        --rwmixread=70 --rwmixwrite=30 --group_reporting \
                         --output=qfio.$pattern.$iodepth.$blocksize.$filesize.$numjobs.$NOW.$HOSTNAME.log
             rm -rf $pattern.data.*
             done
