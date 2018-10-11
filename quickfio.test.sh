@@ -17,7 +17,7 @@ do for iodepth in  8
                         --direct=1 --size=$filesize --numjobs=$numjobs \
                         --refill_buffers --norandommap --randrepeat=0 \
                         --rwmixread=70 --rwmixwrite=30 --group_reporting --output-format=json \
-                        --output=/mnt/pd/qfio.$pattern.$iodepth.$blocksize.$filesize.$numjobs.$NOW.$HOSTNAME.log
+                        --output=qfio.$pattern.$iodepth.$blocksize.$filesize.$numjobs.$NOW.$HOSTNAME.log
             rm -rf $pattern.data.*
             done
          done
