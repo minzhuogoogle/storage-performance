@@ -1,4 +1,4 @@
-### Run fio :  fio trial.fio --output-format=json --output test.log
+## Run fio :  fio trial.fio --output-format=json --output test.log
 [global]
 size=1024m
 directory=/mnt/fio/
