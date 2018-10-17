@@ -1,5 +1,5 @@
 ## Run fio :  fio trial.fio --output-format=json --output test.log
-[global]
+[globalbbbb]
 size=1024m
 directory=/mnt/elastifile/
 iodepth=16
