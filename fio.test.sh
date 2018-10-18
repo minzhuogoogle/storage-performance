@@ -8,7 +8,7 @@
 
 for pattern in read write rw randread randwrite randrw
 do for iodepth in 64
-   do for blocksize in  4k 8k 16k 32k 64k
+   do for blocksize in  4k 8k 
       do for filesize in 512M 1024 2048M
          do for numjobs in 4 8 16
             do NOW=$(date +"%m.%d.%Y")
