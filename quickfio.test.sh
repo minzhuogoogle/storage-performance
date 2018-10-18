@@ -7,7 +7,7 @@
 
 
 for pattern in read write randrw
-do for iodepth in  8
+do for iodepth in  8 16
    do for blocksize in  1M 4k
       do for filesize in 1024M
          do for numjobs in 8
