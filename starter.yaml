@@ -2,54 +2,6 @@
 # components. Don't edit resources in this file. Instead, pull them out into
 # their own files.
 ---
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: plugins
-data:
-  plugins.yaml: ""
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: config
-data:
-  config.yaml: |
-    periodics:
-    - interval: 60m
-      agent: kubernetes
-      name: echo-test
-      spec:
-        containers:
-        - image: alpine
-          command: ["/bin/date"]
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: elastifile-dc-1
-spec:
-  capacity:
-    storage: 4000Gi
-  accessModes:
-    - ReadWriteMany
-  nfs:
-    server: 10.99.0.2
-    # Exported path of your NFS server
-    path: "/ssd-disk/root"
----
-kind: PersistentVolumeClaim
-apiVersion: v1
-metadata:
-  name: elastifile-vol-1
-spec:
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 4000Gi
-  storageClassName: ""
----
 apiVersion: apiextensions.k8s.io/v1beta1
 kind: CustomResourceDefinition
 metadata:
@@ -119,6 +71,7 @@ spec:
       labels:
         app: hook
     spec:
+      serviceAccountName: "hook"
       terminationGracePeriodSeconds: 180
       containers:
       - name: hook
@@ -462,4 +415,39 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: "sinker"
-
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: "hook"
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: "hook"
+rules:
+  - apiGroups:
+      - "prow.k8s.io"
+    resources:
+      - prowjobs
+    verbs:
+      - create
+      - get
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+    verbs:
+      - update
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: "hook"
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: "hook"
+subjects:
+- kind: ServiceAccount
+  name: "hook"
