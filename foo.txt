@@ -1,5 +1,2 @@
 foo
-foo
-foo
-foo
-foo
+f
