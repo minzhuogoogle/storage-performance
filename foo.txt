@@ -1,5 +1,2 @@
 foo
-foo
-go
-ggg
-fffff
+
