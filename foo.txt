@@ -8,3 +8,4 @@ foo
 fo
 foo
 foo
+foo
