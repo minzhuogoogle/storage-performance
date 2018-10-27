@@ -1,7 +1,2 @@
 foo
-foo
-foo
-gooo
-ffffff
-gggggggg
-hhhhhh
+
