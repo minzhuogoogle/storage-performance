@@ -25,7 +25,7 @@ NFS_CLIENT_MOUNT='sudo mount 10.99.0.2:/ssd-disk/root /mnt/ssd'
 
 ACT_INSTALL_CLI = 'git clone https://github.com/aerospike/act.git; sudo apt-get install make gcc libc6-dev libssl-dev zlib1g-dev python -y; cd act; make; make -f Makesalt'
 ACT_CFG_CLI = 'cd; cd act; gsutil cp gs://testing-log/aerospike/act.package.tar act.package.tar; tar xvf act.package.tar; sudo chmod 777 *.*'
-GIT_CLONE_CLI='git clone https://github.com/minzhuogoogle/storage-performance.git; cp storage-performance/*.py .; sudo chmod +x *.py'
+GIT_CLONE_CLI='cd; cd act; git clone https://github.com/minzhuogoogle/storage-performance.git; cp storage-performance/*.py .; sudo chmod +x *.py'
 ACT_RUN_OUPUT_LENGTH = 200
 ACT_RUN_HOUR = 196
 PAUSE = 10
@@ -90,25 +90,32 @@ def reset_vm_instance(vm_name, vm_zone):
         return False
 
 
-def ssh_to_vm(vm_name, vm_zone):
-    vmprompt = '.*@{}.*'.format(vm_name)
+def ssh_to_vm(vm_name, vm_zone, vm_project):
+    vmprompt = '.*{}.*'.format(vm_name)
+    print "prompt to wait for:", vmprompt
+ #   vmprompt ="$"
+
     key='{};{}'.format(vm_name, vm_zone)
     try:
-        vm_access_handler[key] = pexpect.spawn('gcloud compute ssh %s --zone=%s' % (vm_name,vm_zone))
-        vm_access_handler[key].expect(vmprompt)
+#        vm_access_handler[key] = pexpect.spawn('gcloud compute ssh %s --strict-host-key-checking=no --zone %s --project %s  --ssh-flag=\"-o StrictHostKeyChecking=no\" ' % (vm_name, vm_zone, project))
+        vm_access_handler[key] = pexpect.spawn('gcloud compute ssh %s --zone %s ' % (vm_name, vm_zone))
+        print "cmd: gcloud compute ssh {} --strict-host-key-checking=no --zone {} --project {}".format(vm_name, vm_zone, project)
         if verbose:
             vm_access_handler[key].logfile = sys.stdout
             vm_access_handler[key].timeout = 1000
             vm_access_handler[key].maxread=1000
+        vm_access_handler[key].expect(vmprompt, timeout=300)
+
     except pexpect.TIMEOUT:
-        raise OurException("Couldn't ssh to the vm {} in zone {}".format(vm_name, vm_zone))
+         print "something wrong?"
+#        raise OurException("Couldn't ssh to the vm {} in zone {}".format(vm_name, vm_zone))
 
 
 def send_cmd_and_get_output(vm_name, vm_zone, cmd):
     key='{};{}'.format(vm_name, vm_zone)
     vmprompt = '.*@{}.*'.format(vm_name)
     if not key in vm_access_handler.keys():
-        ssh_to_vm(vm_name, vm_zone)
+        ssh_to_vm(vm_name, vm_zone, project)
     try:
        vm_access_handler[key].flush()
        vm_access_handler[key].sendline(cmd)
@@ -223,8 +230,8 @@ def act_run(vm_name, vm_zone, force):
     prepare_act_cfg_on_vm(vm_name, vm_zone, write_load, read_load, ACT_RUN_HOUR)
     act_cfg_file = 'actcfg_ssd_{}_write_{}_read_{}.txt'.format(len(ssd_list), write_load, read_load)
     outputfile = "{}_{}_{}".format(vm_name, vm_zone, act_cfg_file)
-    cli = "cd act"
-    send_cmd_and_get_output(vm_name, vm_zone, cli)
+#    cli = "cd act"
+#    send_cmd_and_get_output(vm_name, vm_zone, cli)
     cli = "sudo ./act {} > {} & ".format(act_cfg_file, outputfile)
     output=send_cmd_and_get_output(vm_name, vm_zone, cli)
 
@@ -475,7 +482,7 @@ def create_vm(project, machine_type, ssdnumber, zone, sequence):
     cmd2createvm = "{} {} --machine-type {} --zone {} --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud  {}".format(VM_CREATE_SUFFIX, vm_name, machine_type, zone, ssd_cfg_string)
     print cmd2createvm
 
-    cmd2createvm = "{} {} --machine-type {} --zone {} --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud  {}".format(VM_CREATE_SUFFIX, vm_name, machine_type, zone, ssd_cfg_string)
+    cmd2createvm = "{} {} --machine-type {} --zone {} --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud  {} --project={}".format(VM_CREATE_SUFFIX, vm_name, machine_type, zone, ssd_cfg_string, project)
     try:
        output = subprocess.check_output(cmd2createvm.split())
        print output
@@ -550,16 +557,16 @@ def init_ssd(vm_name, vm_zone):
 
 ######## populate data for machine type ####
 parser = argparse.ArgumentParser()
-parser.add_argument('-project', '--project', dest='project', type=str, default='aerospike')
+parser.add_argument('-project', '--project', dest='project', type=str, default='aerospike-211521')
 parser.add_argument('-createvm', '--createvm', dest='createvm', type=bool, default=False)
 parser.add_argument('-defaultssd', '--defaultssd', dest='defaultssd', type=str, default='1')
 parser.add_argument('-defaultvmtype', '--defaultvmtype', dest='defaultvmtype', type=str, default='n1-highcpu-4')
 parser.add_argument('-defaultzone', '--defaultzone', dest='defaultzone', type=str, default='us-west2-a')
-parser.add_argument('-defaultvmperzone', '--defaultvmperzone', dest='defaultvmperzone', type=int, default=2)
+parser.add_argument('-defaultvmperzone', '--defaultvmperzone', dest='defaultvmperzone', type=int, default=1)
 
 
-parser.add_argument('-getscript', '--getscript', dest='getscript', type=bool, default=False)
-parser.add_argument('-installact', '--installact', dest='installact', type=bool, default=False)
+parser.add_argument('-getscript', '--getscript', dest='getscript', type=bool, default=True)
+parser.add_argument('-installact', '--installact', dest='installact', type=bool, default=True)
 parser.add_argument('-installfio', '--installfio', dest='installfio', type=bool, default=False)
 
 parser.add_argument('-resetvm', '--resetvm', dest='resetvm', type=bool, default=False)
@@ -570,7 +577,7 @@ parser.add_argument('-runact', '--runact', dest='runact', type=bool, default=Fal
 parser.add_argument('-ssdact', '--ssdact', dest='ssdact', type=int, default=1)
 parser.add_argument('-loadact', '--loadact', dest='loadact', type=int, default=12)
 parser.add_argument('-actlog', '--actlog', dest='actlog', type=str, default='act')
-parser.add_argument('-actresult', '--actresult', dest='actresult', type=bool, default=False)
+parser.add_argument('-actresult', '--actresult', dest='actresult', type=bool, default=True)
 
 parser.add_argument('-actwriteload', '--actwriteload', dest='actwriteload', type=int, default=12)
 parser.add_argument('-actreadload', '--actreadload', dest='actreadload', type=int, default=12)
@@ -597,6 +604,8 @@ if "ALL" in args.defaultzone:
     zones = get_full_list_zones()
 else:
     zones = args.defaultzone.split(',')
+
+project=args.project
 
 if args.createvm:
     vm_list, zone_list, machine_list, ssd_list = create_vms(args.project, args.defaultssd.split(','), args.defaultvmtype.split(','), zones, args.defaultvmperzone)
@@ -626,7 +635,7 @@ if args.actresult:
     actlogfile = open(actreportlog, 'w')
     actsummaryfile = open(actsummarylog, 'w')
     acterrorfile = open(acterrorlog, 'w')
-    header = 'SSD  W_Load  R_Load                                VM_NAME                                          ZONE        MACHINE_TYPE   5%_check  6h_inc   Avg     Max    StDev  Total From   To' 
+    header = 'SSD  W_Load  R_Load                                VM_NAME                                          ZONE        MACHINE_TYPE   5%_check  6h_inc   Avg     Max    StDev  Total From   To'
     actsummaryfile.write(header)
     actsummaryfile.write('===============================================================================================================================================================================================\n')
     if not vm_list:
