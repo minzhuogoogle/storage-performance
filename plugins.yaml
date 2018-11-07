@@ -1,5 +1,0 @@
-plugins:
-  minzhuogoogle/storage-performance:
-  - lgtm
-  - trigger
-  - size
