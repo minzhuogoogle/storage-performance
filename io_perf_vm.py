@@ -18,7 +18,6 @@ from math import sqrt
 SSD_CFG_SUFFIX = " --local-ssd interface=nvme "
 VM_CREATE_SUFFIX = "gcloud compute instances create "
 verbose = True
-#ssd_pattern = '(nvme0n\d+)\s+\d+:\d\s*\s+\d+\s+(\d+.G)\s+\d+\s+disk'
 ssd_pattern = '(nvme0n\d+)\s+\d+:\d.*disk'
 
 FIO_INSTALL_CLI='sudo apt-get install git; cd /opt; sudo git clone https://github.com/axboe/fio; cd fio; sudo apt-get install  gcc -y ;sudo ./configure; sudo apt install make;  sudo make; sudo make install; sudo apt install nfs-common -y'
@@ -34,56 +33,11 @@ RETRY = 3
 RAMP_TIME = 13
 INCREASE_CHECK = 6
 
-
-#mzhuo@nfs-client-1:/mnt/ssd/tmp$ ps -eaf|grep fio
-#root     16226     1  0 06:17 ?        00:00:00 sudo fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16227 16226  1 06:17 ?        00:08:30 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16233 16227  1 06:17 ?        00:12:31 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16234 16227  1 06:17 ?        00:12:17 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16235 16227  1 06:17 ?        00:12:32 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16236 16227  1 06:17 ?        00:12:14 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16237 16227  2 06:17 ?        00:15:04 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16238 16227  1 06:17 ?        00:12:03 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16239 16227  1 06:17 ?        00:12:20 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16240 16227  1 06:17 ?        00:12:05 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16241 16227  1 06:17 ?        00:12:20 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16242 16227  1 06:17 ?        00:12:01 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16243 16227  1 06:17 ?        00:12:14 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-
-#root     16244 16227  1 06:17 ?        00:11:56 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16245 16227  1 06:17 ?        00:12:01 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16246 16227  2 06:17 ?        00:15:06 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16247 16227  1 06:17 ?        00:12:37 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16248 16227  1 06:17 ?        00:12:01 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16249 16227  1 06:17 ?        00:12:34 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16250 16227  2 06:17 ?        00:13:43 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16251 16227  1 06:17 ?        00:12:18 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16252 16227  1 06:17 ?        00:12:15 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16253 16227  1 06:17 ?        00:12:37 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16254 16227  2 06:17 ?        00:15:03 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16255 16227  1 06:17 ?        00:12:34 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16256 16227  2 06:17 ?        00:13:42 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16257 16227  1 06:17 ?        00:12:39 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16258 16227  2 06:17 ?        00:15:03 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16259 16227  2 06:17 ?        00:13:45 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16260 16227  1 06:17 ?        00:11:57 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16261 16227  1 06:17 ?        00:12:00 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16262 16227  1 06:17 ?        00:12:15 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16263 16227  1 06:17 ?        00:12:15 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-#root     16264 16227  1 06:17 ?        00:12:02 fio --name=read.data.small --iodepth=128 --rw=randread --bs=1500 --direct=1 --size=512M --numjobs=32 --group_reporting --rate_iops=22000 --time_based --runtime=86400
-
-#mzhuo    16277     1  2 06:18 ?        00:16:07 fio --name=write.data --iodepth=128 --rw=randwrite --bs=128k --direct=1 --buffered=0 --size=375M --numjobs=1 --group_reporting --rate_iops=150 --time_based --runtime=86400
-#mzhuo    16284     1  4 06:18 ?        00:28:32 fio --name=read.data --iodepth=128 --rw=randread --bs=128k --direct=1 --buffered=0 --size=375M --numjobs=1 --group_reporting --rate_iops=150 --time_based --runtime=86400
-
-
 ###### global variables ##################
 
 vm_access_handler = {}
 
 def strictly_increasing(L):
-#    print "check whether it is increased\n"
-#    print L
-#    time.sleep(1)
     return all(x<y for x, y in zip(L, L[1:]))
 
 def strictly_decreasing(L):
@@ -247,13 +201,6 @@ def kill_act_process(vm_name, vm_zone):
         time.sleep(PAUSE)
         i += 1
     return
-#[mzhuo@elastifile-client-3 ~]$ sudo showmount -e 10.99.0.2
-#Export list for 10.99.0.2:
-#/ssd-container-2/root *
-#/ssd-container-1/root *
-#[mzhuo@elastifile-client-3 ~]$ sudo mount 10.99.0.2:/ssd-container-1/root /mnt/ssd1
-#[mzhuo@elastifile-client-3 ~]$ sudo mount 10.99.0.2:/ssd-container-2/root /mnt/ssd2
-# fio --name first --verify_dump=1 --verify=meta --readwrite=randrw --size=1G --continue_on_error=verify
 
 
 def act_run(vm_name, vm_zone, force):
@@ -364,23 +311,10 @@ def is_init_running(vm_name, vm_zone):
 
 def convert_2_list(actoutput):
     actoutput = actoutput[5:-3]
-#  data is act version 4.0
-#        trans                                              device
-#        %>(ms)                                             %>(ms)
-#slice        1      2      4      8     16     32     64        1      2      4      8     16     32     64
-#-----   ------ ------ ------ ------ ------ ------ ------   ------ ------ ------ ------ ------ ------ ------
-#    1     0.24   0.10   0.00   0.00   0.00   0.00   0.00     0.24   0.10   0.00   0.00   0.00   0.00   0.00
-#    2     0.64   0.26   0.01   0.00   0.00   0.00   0.00     0.63   0.26   0.01   0.00   0.00   0.00   0.00
-#    3     0.99   0.41   0.01   0.00   0.00   0.00   0.00     0.97   0.40   0.01   0.00   0.00   0.00   0.00
-#    4     1.29   0.54   0.01   0.00   0.00   0.00   0.00     1.27   0.53   0.01   0.00   0.00   0.00   0.00
-#    5     1.55   0.65   0.01   0.00   0.00   0.00   0.00     1.53   0.64   0.01   0.00   0.00   0.00   0.00
-#    6     1.77   0.74   0.02   0.00   0.00   0.00   0.00     1.75   0.73   0.01   0.00   0.00   0.00   0.00
     sequence = 1
     alldata = []
     for _temp in actoutput:
         slicedata = _temp.split()
-    #    print slicedata
- #       if int(slicedata[0]) == sequence and len(slicedata) == 15:
         if len(slicedata) == 15 and not '-' in slicedata:
             alldata.append(slicedata)
             sequence += 1
@@ -418,9 +352,7 @@ def check_act_run(vm_name, vm_zone, vm_machine_type, actlogfile, actsummaryfile,
     owner = 'mzhuo'
     cli = "ps -eaf|grep act |grep sudo"
     output=send_cmd_and_get_output(vm_name, vm_zone, cli)
-    # print "output :\n"
-    # print output
-    print "***len", len(output), '\n'
+
     if len(output) < ACT_RUN_OUPUT_LENGTH:
         temp = 'No act is running on {} in zone.'.format(vm_name, vm_zone)
         print temp
@@ -433,22 +365,18 @@ def check_act_run(vm_name, vm_zone, vm_machine_type, actlogfile, actsummaryfile,
        send_cmd_and_get_output(vm_name, vm_zone, cli)
        cli = "ls -latr | grep actcfg | grep {}_{} ".format(vm_name, vm_zone)
        output=' '.join(send_cmd_and_get_output(vm_name, vm_zone, cli).splitlines())
-       # print "output :\n"
-       # print output
-       # print "***\n", len(output)
+       
        act_log_file = '.*{}\s{}\s+(\d+).*({}_{}.*.txt).*'.format(owner, owner, vm_name, vm_zone)
        match_act_log_file = re.compile(act_log_file)
-       # print "patter: ", act_log_file
+      
        if match_act_log_file.match(output):
            logfilesize = match_act_log_file.match(output).group(1)
            logfilename = match_act_log_file.match(output).group(2)
-           # print "log file is  " , logfilename, logfilesize
+          
            time.sleep(2)
            cli = "ls -latr | grep actcfg | grep {}_{} ".format(vm_name, vm_zone)
            output=' '.join(send_cmd_and_get_output(vm_name, vm_zone, cli).splitlines())
-           # print "output :\n"
-           # print output
-           # print "***\n", len(output)
+          
            if match_act_log_file.match(output):
                actlogfile.write('\n\nACT result for VM {} in Zone {}.\n'.format(vm_name, vm_zone))
                actlogfile.write('===============================================================================================================================================================================================\n')
@@ -457,7 +385,7 @@ def check_act_run(vm_name, vm_zone, vm_machine_type, actlogfile, actsummaryfile,
                if newlogfilename == logfilename:
                    if logfilesize < newlogfilesize:
                        cli = "latency_calc/act_latency.py -l {}".format(newlogfilename)
-                      # actlogfile.write('cli: {} \n'.format(cli))
+                    
                        outputpattern = ".*actcfg_ssd_(\d+)_write_(\d+)_read_(\d+).txt".format(vm_name, vm_zone)
                        test_pattern = re.compile(outputpattern)
                        if test_pattern.match(newlogfilename):
@@ -476,18 +404,18 @@ def check_act_run(vm_name, vm_zone, vm_machine_type, actlogfile, actsummaryfile,
                        total_write = int(no_ssd) * int(write_load)
                        total_read = int(no_ssd) * int(read_load)
                        for _line in actlist:
-                           # print "line : ", _line
+                          
                            allnumbers = number_findall.findall(_line)
-                           # print allnumbers
+                           
                            for _number in allnumbers:
                                if float(_number) >= 5:
                                   status = 'FAIL'
                                   linebreak = True
                                   break
                            if linebreak:
-                               # print "no need to chech more lines"
+                               
                                break
-                           # print "need to ccheck more"  
+                          
                        if not  linebreak:      
                            status = "PASS"
 
@@ -538,18 +466,14 @@ def check_act_run(vm_name, vm_zone, vm_machine_type, actlogfile, actsummaryfile,
             acterrorlog.write('\n')
 
     if not check_done:
-    #    install_act_on_vm(vm_name, vm_zone)
-    #    download_script_to_vm(vm_name, vm_zone)
-    #    act_run(vm_name, vm_zone, False)
         print "make act run"
-#        time.sleep(100)
+
 
 def create_vm(project, machine_type, ssdnumber, zone, sequence):
     ssd_cfg_string = SSD_CFG_SUFFIX*int(ssdnumber)
     vm_name = "{}-cpu-{}-ssd-{}-zone-{}-no-{}".format(project, machine_type, ssdnumber, zone, sequence)
     cmd2createvm = "{} {} --machine-type {} --zone {} --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud  {}".format(VM_CREATE_SUFFIX, vm_name, machine_type, zone, ssd_cfg_string)
     print cmd2createvm
-#    cmd2checkvm = "gcloud compute  instances describe  {} --zone {}".format(vm_name, zone)
 
     cmd2createvm = "{} {} --machine-type {} --zone {} --image-family=ubuntu-1804-lts --image-project=ubuntu-os-cloud  {}".format(VM_CREATE_SUFFIX, vm_name, machine_type, zone, ssd_cfg_string)
     try:
