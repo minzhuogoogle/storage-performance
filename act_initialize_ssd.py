@@ -50,8 +50,8 @@ def is_initialize_running():
         templine = subprocess.check_output(cmd.split()).splitlines()
         for _temp in templine:
             for __temp in  _temp.split():
-            if 'actprep' in __temp:
-                return True
+                if 'actprep' in __temp:
+                    return True
         return False
     except Exception, i:
         print '\nException: ', i
