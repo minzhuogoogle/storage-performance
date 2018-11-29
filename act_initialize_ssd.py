@@ -62,7 +62,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-device_type', '--device_type', dest='device_type', type=str, default='nvme')
 parser.add_argument('-device_list', '--device_list', dest='device_list', type=str)
 parser.add_argument('-check_init_status', '--check_init_status', dest='check_init_status', type=bool, default=True)
-parser.add_argument('-start_ssd_init', '--start_ssd_init', dest='start_ssd_init', type=bool, default=False)
+parser.add_argument('-start_ssd_init', '--start_ssd_init', dest='start_ssd_init', type=bool, default=True)
 
 
 args = parser.parse_args()
