@@ -50,7 +50,9 @@ def act_initialize_ssd(device_list):
 def is_initialize_running():
     cmd = "ps -ef"
     try:
+        
         templine = subprocess.check_output(cmd.split()).splitlines()
+        print "check act running or not", templine
         for _temp in templine:
             for __temp in  _temp.split():
                 if 'actprep' in __temp:
