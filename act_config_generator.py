@@ -15,7 +15,8 @@ import time
 
 NVME='nvme0n'
 FACTOR=1000
-ssd_pattern = '(nvme0n\d+)\s+\d+:\d.*disk'
+#ssd_pattern = '(nvme0n\d+)\s+\d+:\d.*disk'
+ssd_pattern = '([a-z0-9]+)\s+\d+:[1-9]+.*375G.*disk'
 
 
 def get_device_name(no_of_devices):
