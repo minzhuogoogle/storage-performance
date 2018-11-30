@@ -35,11 +35,14 @@ def get_device_name():
 
 
 def act_initialize_ssd(device_list):
+    print device_list
+        
     for _ssd in device_list:
         cmd = "sudo ./actprep {} ".format(_ssd)
+        print cmd
         try:
             subprocess.Popen(cmd.split())
-            return True
+            
         except Exception, i:
             print '\nException: ', i
             return False
