@@ -1,11 +1,2 @@
 sss
-ddd
-gggg
-ddd
-ggg
-jjj
-dddd
-lll
-kkkk
-gggg
-gggggg
+
